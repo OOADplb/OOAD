@@ -1,0 +1,11 @@
+1. HibernateApplicationContext.xml
+2. create database schema and user
+3. create class teacher with name and birthday
+	show database result and transaction effort.
+4. create data type with embedded mapping
+	show database result, show auto schema update
+5. simple HQL
+6. create course class, introduce super class: AbstractCourse: NormalCourse and OnlineCourse
+	single table strategy only, HQL sample
+7. show association mapping
+8. conclusion 

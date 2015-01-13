@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_qb8akM37EdqwVrslYOdUDA">
+  <elementImport xmi:id="_eMDOkP0QEd-koIgW4RuVSA">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+  </elementImport>
+  <elementImport xmi:id="_eMJ8QP0QEd-koIgW4RuVSA">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+  </elementImport>
+  <elementImport xmi:id="_eMJ8Qf0QEd-koIgW4RuVSA">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+  </elementImport>
+  <elementImport xmi:id="_eMKjUP0QEd-koIgW4RuVSA">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#UnlimitedNatural"/>
+  </elementImport>
+  <packagedElement xmi:type="uml:Package" xmi:id="_w8IxIM37EdqwVrslYOdUDA" name="ooad">
+    <packagedElement xmi:type="uml:Class" xmi:id="_fcLv0P0HEd-koIgW4RuVSA" name="Course">
+      <ownedAttribute xmi:id="_iVX0YP0QEd-koIgW4RuVSA" name="name">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EString"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:id="_lgPN4P0QEd-koIgW4RuVSA" name="name"/>
+      <ownedAttribute xmi:id="_bsoWEP0hEd-koIgW4RuVSA" name="totalStudents"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_gkMgwP0HEd-koIgW4RuVSA" name="Teacher">
+      <ownedAttribute xmi:id="_iFlbAP0HEd-koIgW4RuVSA" name="name">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_nTkzyv0QEd-koIgW4RuVSA" name="A_&lt;teacher>_&lt;course>" memberEnd="_nTkzy_0QEd-koIgW4RuVSA _nTkzzv0QEd-koIgW4RuVSA" navigableOwnedEnd="_nTkzzv0QEd-koIgW4RuVSA">
+      <ownedEnd xmi:id="_nTkzy_0QEd-koIgW4RuVSA" name="teacher" type="_gkMgwP0HEd-koIgW4RuVSA" association="_nTkzyv0QEd-koIgW4RuVSA">
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nTkzzP0QEd-koIgW4RuVSA" value="1"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nTkzzf0QEd-koIgW4RuVSA" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="_nTkzzv0QEd-koIgW4RuVSA" name="course" type="_fcLv0P0HEd-koIgW4RuVSA" isUnique="false" association="_nTkzyv0QEd-koIgW4RuVSA">
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nTkzz_0QEd-koIgW4RuVSA" value="*"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nTkz0P0QEd-koIgW4RuVSA"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Enumeration" xmi:id="_ynyS8P0QEd-koIgW4RuVSA" name="Gender">
+      <ownedLiteral xmi:id="_20lDgP0QEd-koIgW4RuVSA" name="female"/>
+      <ownedLiteral xmi:id="_10v-MP0QEd-koIgW4RuVSA" name="male"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:DataType" xmi:id="_6aLRMP0QEd-koIgW4RuVSA" name="Address">
+      <ownedAttribute xmi:id="_8oN2EP0QEd-koIgW4RuVSA" name="postCode"/>
+      <ownedAttribute xmi:id="_JdlmAP0REd-koIgW4RuVSA" name="country"/>
+      <ownedAttribute xmi:id="_P-9oUP0REd-koIgW4RuVSA" name="addrInfo"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_L_JJgP0hEd-koIgW4RuVSA" name="NormalCourse">
+      <generalization xmi:id="_UwwwI_0hEd-koIgW4RuVSA" general="_fcLv0P0HEd-koIgW4RuVSA"/>
+      <ownedAttribute xmi:id="_PJQ8IP0hEd-koIgW4RuVSA" name="classroomName"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_Q-PgwP0hEd-koIgW4RuVSA" name="OnlineCourse">
+      <generalization xmi:id="_VK8Ks_0hEd-koIgW4RuVSA" general="_fcLv0P0HEd-koIgW4RuVSA"/>
+      <ownedAttribute xmi:id="_SMfckP0hEd-koIgW4RuVSA" name="URL"/>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>
