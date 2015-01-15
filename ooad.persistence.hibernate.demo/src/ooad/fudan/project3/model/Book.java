@@ -63,4 +63,8 @@ public class Book extends BaseModelObject {
 		readings.add(Reading.create(this, pm));
 	}
 	
+	public Reading getLatestReading(){
+		return ((ArrayList<Reading>)readings).get(readings.size() - 1);
+	}
+	
 }

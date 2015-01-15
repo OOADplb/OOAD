@@ -37,6 +37,10 @@ public class PaperBook extends Book {
 		friend.addRecord(record);
 	}
 
+	public BorrowRecord getLatestRecord(){
+		return ((ArrayList<BorrowRecord>)records).get(records.size() - 1);
+	}
+	
 	public boolean isBorrow() {
 		return borrow;
 	}
