@@ -9,6 +9,11 @@ public class Borrow_Return {
 	PaperBook paperbook;
 	Friend friend;
 	
+	public Borrow_Return(PaperBook pb, Friend f){
+		this.paperbook = pb;
+		this.friend = f;
+	}
+	
 	public BorrowRecord borrowBook(IPersistenceManager pm){
 		
 		//判断是否可借阅
@@ -36,6 +41,7 @@ public class Borrow_Return {
 		//书本设为未借阅状态
 		paperbook.setStatus(false);
 		pm.save(paperbook);
+		pm.save(paperbook.getLatestRecord());
 		return record;
 	}
 }

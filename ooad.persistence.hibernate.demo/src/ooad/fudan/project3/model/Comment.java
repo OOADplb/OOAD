@@ -8,10 +8,11 @@ import edu.fudan.ss.persistence.hibernate.common.IPersistenceManager;
 
 @Entity
 public class Comment extends BaseModelObject {
-	public static Comment create(Book book, String abstracts, IPersistenceManager pm) {
+	public static Comment create(Book book, String abstracts, String uri, IPersistenceManager pm) {
 		Comment result = new Comment();
 		result.setAbstracts(abstracts);
 		result.setBook(book);
+		result.setURI(uri); //对于杂志上收集的书评,uri为null
 		pm.save(result);
 		return result;
 	}

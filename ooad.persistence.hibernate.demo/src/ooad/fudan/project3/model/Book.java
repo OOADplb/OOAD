@@ -48,8 +48,8 @@ public class Book extends BaseModelObject {
 		return comments;
 	}
 	
-	public void createComment(String abstracts, IPersistenceManager pm){
-		comments.add(Comment.create(this, abstracts, pm));
+	public void createComment(String abstracts, String uri, IPersistenceManager pm){
+		comments.add(Comment.create(this, abstracts, uri, pm));
 	}
 	
 	@OneToMany(mappedBy="book", cascade = {CascadeType.ALL})
@@ -64,7 +64,7 @@ public class Book extends BaseModelObject {
 	}
 	
 	public Reading getLatestReading(){
-		return ((ArrayList<Reading>)readings).get(readings.size() - 1);
+		return (Reading)readings.toArray()[readings.toArray().length - 1];
 	}
 	
 }

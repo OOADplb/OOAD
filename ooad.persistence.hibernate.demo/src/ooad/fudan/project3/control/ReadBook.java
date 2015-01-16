@@ -9,16 +9,28 @@ public class ReadBook {
 	Book book;
 	String[] commentAbstract;
 	String[] noteContent;
+	String[] uri;
 	
+	public ReadBook(Book b, String[] ca, String[] nc, String[] uri){
+		this.book = b;
+		this.commentAbstract = ca;
+		this.noteContent = nc;
+		this.uri = uri;
+	}
 	//Library library;
 	
 	public Reading read(IPersistenceManager pm){
+		if(uri.length != commentAbstract.length){
+			System.err.println("Comment abstracts and URIs are not matched!");
+			return null;
+		}
+		
 		//增加一条阅读记录
 		Reading result = Reading.create(book, pm);
 		//写评论
 		if(commentAbstract != null){
 			for(int i=0;i<commentAbstract.length;i++){
-			book.createComment(commentAbstract[i], pm);
+			book.createComment(commentAbstract[i], uri[i], pm);
 			pm.save(book);
 			}
 		}

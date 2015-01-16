@@ -18,8 +18,9 @@ public class PaperBook extends Book {
 		PaperBook result = new PaperBook();
 		result.setLibrary(library);
 		result.setTitle(title);
+		result.setStatus(false);
 		pm.save(result);
-		return result;
+		return result;		
 	}
 	
 	private boolean borrow;
@@ -38,7 +39,7 @@ public class PaperBook extends Book {
 	}
 
 	public BorrowRecord getLatestRecord(){
-		return ((ArrayList<BorrowRecord>)records).get(records.size() - 1);
+		return (BorrowRecord)records.toArray()[records.toArray().length - 1];
 	}
 	
 	public boolean isBorrow() {
