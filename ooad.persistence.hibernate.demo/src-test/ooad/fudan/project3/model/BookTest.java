@@ -8,8 +8,10 @@ public class BookTest extends HibernateBaseTest {
 
 	@Test
 	public void bookAddingTest() {
-		PaperBook paperBook = PaperBook.create(null, "pb1", getPersistenceManager());
-		EBook eBook = EBook.create(null,"eb1", getPersistenceManager());
+		Library library = Library.getInstance(getPersistenceManager());
+		PaperBook paperBook = PaperBook.create(library, "pb1", getPersistenceManager());
+		EBook eBook = EBook.create(library,"eb1", getPersistenceManager());
+		assertObjectPersisted(library);
 		assertObjectPersisted(paperBook);
 		assertObjectPersisted(eBook);
 		
