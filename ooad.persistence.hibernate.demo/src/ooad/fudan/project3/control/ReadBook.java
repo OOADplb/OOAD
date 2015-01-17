@@ -23,18 +23,20 @@ public class ReadBook {
 		return r;
 	}
 	
-	public Book writeComment(IPersistenceManager pm, String commentAbstract, String uri){
-		if(commentAbstract != null){
-			book.createComment(commentAbstract, uri, pm);
+	public Comment writeComment(IPersistenceManager pm, String commentAbstract, String uri){
+		if(commentAbstract != null){			
+			Comment c = book.createComment(commentAbstract, uri, pm);
+			return c;
 		}
-		return book;
+		return null;
 	}
 	
-	public Reading writeNote(IPersistenceManager pm, Reading r, String noteContent){
+	public Note writeNote(IPersistenceManager pm, Reading r, String noteContent){
 		if(noteContent != null){
-			r.createNote(noteContent, pm);
+			Note n = r.createNote(noteContent, pm);
+			return n;
 		}
-		return r;
+		return null;
 	}
 
 }
