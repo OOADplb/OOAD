@@ -7,9 +7,9 @@ import edu.fudan.ss.persistence.hibernate.common.HibernateBaseTest;
 public class BookTest extends HibernateBaseTest {
 
 	@Test
-	public void test() {
+	public void bookAddingTest() {
 		PaperBook paperBook = PaperBook.create(null, "pb1", getPersistenceManager());
-		EBook eBook = EBook.create(null,"pb1", getPersistenceManager());
+		EBook eBook = EBook.create(null,"eb1", getPersistenceManager());
 		assertObjectPersisted(paperBook);
 		assertObjectPersisted(eBook);
 		
@@ -22,4 +22,15 @@ public class BookTest extends HibernateBaseTest {
 		assertEquals(2,getPersistenceManager().createQuery(hql3).list().size());
 	}
 
+	@Test
+	public void bookUpdateTest() {
+		PaperBook paperBook = PaperBook.create(null, "pb1", getPersistenceManager());
+		assertObjectPersisted(paperBook);
+		paperBook.setBorrow(true);
+		paperBook.update(getPersistenceManager());
+		
+		String hql1 = "from PaperBook pb where pb.borrow = true";
+		
+		assertEquals(1,getPersistenceManager().createQuery(hql1).list().size());
+	}
 }

@@ -7,10 +7,10 @@ import edu.fudan.ss.persistence.hibernate.common.HibernateBaseTest;
 public class CommentTest extends HibernateBaseTest {
 
 	@Test
-	public void test() {
+	public void commentAddingTest() {
 		PaperBook paperBook = PaperBook.create(null, "pb1", getPersistenceManager());
-		Comment c = Comment.create(paperBook, "c1", "uri", getPersistenceManager());
-		c.setURI("127.0.0.1");
+		Comment c = Comment.create(paperBook, "c1", "127.0.0.1", getPersistenceManager());
+		assertObjectPersisted(c);
 		
 		String hql1 = "from Comment c1 where c1.book.title='pb1' and c1.URI='127.0.0.1'";
 		

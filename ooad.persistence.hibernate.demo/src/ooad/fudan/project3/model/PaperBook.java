@@ -32,10 +32,11 @@ public class PaperBook extends Book {
 		return records;
 	}
 	
-	public void createRecord(Friend friend, IPersistenceManager pm){
+	public BorrowRecord createRecord(Friend friend, IPersistenceManager pm){
 		BorrowRecord record = BorrowRecord.create(this, friend, pm);
 		records.add(record);
 		friend.addRecord(record);
+		return record;
 	}
 
 	public BorrowRecord getLatestRecord(){

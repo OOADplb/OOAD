@@ -35,11 +35,15 @@ public class Library extends BaseModelObject {
 		return books;
 	}
 	
-	public void createPaperBook(String title, IPersistenceManager pm){
-		books.add(PaperBook.create(this, title, pm));
+	public PaperBook createPaperBook(String title, IPersistenceManager pm){
+		PaperBook pb = PaperBook.create(this, title, pm);
+		books.add(pb);
+		return pb;
 	}
 	
-	public void createEBook(String title, IPersistenceManager pm){
-		books.add(EBook.create(this, title, pm));
+	public EBook createEBook(String title, IPersistenceManager pm){
+		EBook eb = EBook.create(this, title, pm);
+		books.add(eb);
+		return eb;
 	}
 }

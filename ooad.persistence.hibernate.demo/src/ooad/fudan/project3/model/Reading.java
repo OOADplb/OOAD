@@ -37,8 +37,10 @@ public class Reading extends BaseModelObject {
 		return notes;
 	}
 	
-	public void createNote(String content, IPersistenceManager pm){
-		notes.add(Note.create(this, content, pm));
+	public Note createNote(String content, IPersistenceManager pm){
+		Note note = Note.create(this, content, pm);
+		notes.add(note);
+		return note;
 	}
 
 	public Book getBook() {
