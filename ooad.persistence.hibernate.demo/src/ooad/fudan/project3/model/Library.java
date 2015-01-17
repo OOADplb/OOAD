@@ -2,11 +2,13 @@ package ooad.fudan.project3.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
+import ooad.fudan.project3.database.LoadUtil;
 import edu.fudan.ss.persistence.hibernate.common.BaseModelObject;
 import edu.fudan.ss.persistence.hibernate.common.IPersistenceManager;
 
@@ -23,9 +25,13 @@ public class Library extends BaseModelObject {
 	}
 	
 	public static Library getInstance(IPersistenceManager pm){
-		if(library == null)
+		/*if(library == null){
+			List<Library> ll = (List<Library>) LoadUtil.getLibraryFromDB(pm);
+			if(ll.size() != 0)
+				return ll.get(0);
 			return create(pm);
-		return library;
+		}*/
+		return create(pm);
 	}
 	
 	@OneToMany(mappedBy="library", cascade = {CascadeType.ALL})

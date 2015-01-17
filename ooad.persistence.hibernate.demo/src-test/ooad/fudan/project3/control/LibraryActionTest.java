@@ -13,7 +13,7 @@ public class LibraryActionTest extends HibernateBaseTest{
 		
 		//Test paperbook
 		PaperBook pb = PaperBook.create(null, "pb", getPersistenceManager());		
-		LibraryAction la = new LibraryAction(l);		
+		LibraryAction la = new LibraryAction(l);
 		la.addBook(pb, getPersistenceManager());		
 		Book test1 = la.getBookByTitle("pb");		
 		assertEquals(2,test1.getTitle().length());

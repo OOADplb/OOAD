@@ -8,8 +8,8 @@ import ooad.fudan.project3.model.*;
 public class LibraryAction {
 	Library library;
 	
-	public LibraryAction(Library l){
-		this.library = l;
+	public LibraryAction(Library library){
+		this.library = library;
 	}
 	
 	public Library addBook(Book b, IPersistenceManager pm){
