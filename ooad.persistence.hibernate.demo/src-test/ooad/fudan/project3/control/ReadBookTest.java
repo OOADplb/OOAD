@@ -12,16 +12,20 @@ public class ReadBookTest extends HibernateBaseTest{
 	public void Test(){
 		PaperBook pb = PaperBook.create(null, "pb", getPersistenceManager());
 		assertObjectPersisted(pb);
-		String[] ca = {"testComment"};
-		String[] nc = {"noteContentTest"};
-		String[] uri = {"testURI"};
+		EBook eb = EBook.create(null, "eb2", getPersistenceManager());
 		
-		String hql1 = "from PaperBook pb";
+		String commentAbstract = "testComment";
+		String noteContent = "noteContentTest";
+		String uri = "testURI";
+		
+		String hql1 = "from PaperBook pb where pb.comments.abstract";
 		String hql2 = "from Reading rd";
 		
-		ReadBook rb = new ReadBook(pb,ca,nc,uri);
-		Reading rd = rb.read(getPersistenceManager());
-		assertObjectPersisted(rd);
+		ReadBook rb = new ReadBook(pb);
+		Reading rd = rb.startReading(getPersistenceManager());
+		rb.writeComment(getPersistenceManager(), commentAbstract, uri);
+		rb.writeNote(getPersistenceManager(), rd, noteContent);
+		rb.endReading(getPersistenceManager(), rd);
 		//测试评论加入成功
 		assertEquals(11,((Comment)((PaperBook)(getPersistenceManager().createQuery(hql1).list().get(0))).getComments().toArray()[0]).getAbstracts().length());
 		//测试笔记加入成功

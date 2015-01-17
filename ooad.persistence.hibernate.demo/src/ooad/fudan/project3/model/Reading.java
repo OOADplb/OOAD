@@ -64,6 +64,11 @@ public class Reading extends BaseModelObject {
 	public void setEnd(Date end) {
 		this.end = end;
 	}
+
+	public void update(IPersistenceManager pm) {
+		pm.save(this);
+		
+	}
 	
 	
 }

@@ -12,16 +12,26 @@ import edu.fudan.ss.persistence.hibernate.common.IPersistenceManager;
 
 @Entity
 public class Library extends BaseModelObject {
-	public static Library create(IPersistenceManager pm) {
+	private static Library library = null;
+	
+	private Library() {}
+	
+	private static Library create(IPersistenceManager pm) {
 		Library result = new Library();
 		pm.save(result);
 		return result;
 	}
 	
+	public static Library getInstance(IPersistenceManager pm){
+		if(library == null)
+			return create(pm);
+		return library;
+	}
+	
 	@OneToMany(mappedBy="library", cascade = {CascadeType.ALL})
 	Collection<Book> books = new ArrayList<Book>();
 	
-	public Collection<Book> getComments() {
+	public Collection<Book> getBooks() {
 		return books;
 	}
 	

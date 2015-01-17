@@ -61,5 +61,10 @@ public class BorrowRecord extends BaseModelObject {
 	public void setEnd(Date end) {
 		this.end = end;
 	}
+
+	public void update(IPersistenceManager pm) {
+		pm.save(this);
+		
+	}
 	
 }

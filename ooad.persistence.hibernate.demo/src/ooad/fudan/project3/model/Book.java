@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -19,7 +20,7 @@ import edu.fudan.ss.persistence.hibernate.common.IPersistenceManager;
 @DiscriminatorColumn(name = "BOOKTYPE")
 
 public class Book extends BaseModelObject {
-	
+	@Column(unique = true)
 	private String title;
 	
 	@ManyToOne
@@ -65,6 +66,11 @@ public class Book extends BaseModelObject {
 	
 	public Reading getLatestReading(){
 		return (Reading)readings.toArray()[readings.toArray().length - 1];
+	}
+
+	public void update(IPersistenceManager pm) {
+		pm.save(this);
+		
 	}
 	
 }

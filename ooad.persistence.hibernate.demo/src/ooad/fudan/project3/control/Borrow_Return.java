@@ -24,8 +24,8 @@ public class Borrow_Return {
 		//增加一条借阅记录
 		paperbook.createRecord(friend, pm);
 		//书本设为已借阅状态
-		paperbook.setStatus(true);
-		pm.save(paperbook);
+		paperbook.setBorrow(true);
+		paperbook.update(pm);
 		return paperbook.getLatestRecord();
 	}
 	
@@ -37,11 +37,10 @@ public class Borrow_Return {
 		//取出书本的最后一条借阅记录，加上结束时间
 		BorrowRecord record = paperbook.getLatestRecord();
 		record.setEnd(new Date(System.currentTimeMillis()));
-		pm.save(record);
+		record.update(pm);
 		//书本设为未借阅状态
-		paperbook.setStatus(false);
-		pm.save(paperbook);
-		pm.save(paperbook.getLatestRecord());
+		paperbook.setBorrow(false);
+		paperbook.update(pm);
 		return record;
 	}
 }

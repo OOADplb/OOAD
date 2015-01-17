@@ -18,7 +18,7 @@ public class PaperBook extends Book {
 		PaperBook result = new PaperBook();
 		result.setLibrary(library);
 		result.setTitle(title);
-		result.setStatus(false);
+		result.setBorrow(false);
 		pm.save(result);
 		return result;		
 	}
@@ -46,7 +46,7 @@ public class PaperBook extends Book {
 		return borrow;
 	}
 
-	public void setStatus(boolean borrow) {
+	public void setBorrow(boolean borrow) {
 		this.borrow = borrow;
 	}
 	
