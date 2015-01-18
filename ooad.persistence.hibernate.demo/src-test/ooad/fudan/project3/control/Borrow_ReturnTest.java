@@ -34,6 +34,16 @@ public class Borrow_ReturnTest extends HibernateBaseTest{
 		assertEquals(false,((PaperBook)(getPersistenceManager().createQuery(hql2).list().get(0))).isBorrow());
 		//测试end时间已经加入
 		assertEquals(1,getPersistenceManager().createQuery(hql4).list().size());
+	
+		//Test getting history
+		Friend carrot = Friend.create("carrot", getPersistenceManager());
+		Borrow_Return bort2 = new Borrow_Return(pb,carrot);
+		bort2.borrowBook(getPersistenceManager());
+		
+		BorrowRecord[] brarray = bort2.getHistoryByName("carrot", getPersistenceManager());
+		BorrowRecord br = brarray[0];
+				
+		assertEquals("carrot",br.getFriend().getName());
 	}
 	
 

@@ -12,6 +12,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import ooad.fudan.project3.database.LoadUtil;
 import edu.fudan.ss.persistence.hibernate.common.BaseModelObject;
 import edu.fudan.ss.persistence.hibernate.common.IPersistenceManager;
 
@@ -75,6 +76,16 @@ public class Book extends BaseModelObject {
 	public void update(IPersistenceManager pm) {
 		pm.save(this);
 		
+	}
+
+	public void init(IPersistenceManager pm) {
+		readings = (Collection<Reading>) LoadUtil.getFromDB("Reading", "book", this.getId(), pm);
+		comments = (Collection<Comment>) LoadUtil.getFromDB("Comment", "book", this.getId(), pm);
+		
+		Object[] readingArray = readings.toArray();
+		for(int i = 0; i < readingArray.length; i++){
+			((Reading)readingArray[i]).init(pm);
+		}
 	}
 	
 }

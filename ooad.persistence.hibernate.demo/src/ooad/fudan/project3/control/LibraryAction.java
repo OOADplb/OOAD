@@ -1,5 +1,6 @@
 package ooad.fudan.project3.control;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -46,11 +47,11 @@ public class LibraryAction {
 	
 	public Book getBookByTitle(String title){
 		Collection<Book> books = library.getBooks();
-		Object[] bookArray = books.toArray();
-		if(bookArray.length == 0){
+		if((books == null) ||(books.size() == 0)){
 			System.err.println("There is no book in the library");
 			return null;
 		}
+		Object[] bookArray = books.toArray();			
 		for(int i=0;i<bookArray.length;i++){
 			if(((Book)bookArray[i]).getTitle().equals(title))
 				return (Book)bookArray[i];
@@ -59,16 +60,10 @@ public class LibraryAction {
 		return null;
 	}
 
-	public Friend getFriendByName(String name, IPersistenceManager pm){
-		List<?> friendList = LoadUtil.getFriendFromDB(name, pm);
-		if(friendList.size() == 0){
-			return null;
-		}
-		return (Friend)friendList.get(0);
-	}
+	
 	
 	public Friend addFriend(String name, IPersistenceManager pm){
-		Friend temp = getFriendByName(name, pm);
+		Friend temp = LoadUtil.getFriendByName(name, pm);
 		if(temp != null){
 			System.err.println("The book already exists!");
 			return temp;
@@ -76,4 +71,60 @@ public class LibraryAction {
 		Friend f = Friend.create(name, pm);
 		return f;
 	}
+
+	public Comment[] getCommentByBook(String title, IPersistenceManager pm){
+		Book temp = getBookByTitle(title);
+		if(temp == null){
+			System.err.println("The book does not exist!");
+			return null;
+		}
+
+		List<?> commentList = LoadUtil.getFromDB("Comment", "book", temp.getId(), pm);
+		Comment[] result = new Comment[commentList.size()];
+		for(int i=0;i<result.length;i++){
+			result[i] = (Comment)commentList.get(i);
+		}
+		return result;
+	}
+
+	public Note[] getNoteByBook(String title, IPersistenceManager pm){
+		Book temp = getBookByTitle(title);
+			if(temp == null){
+				System.err.println("The book does not exist!");
+				return null;
+			}
+		
+		
+		List<?> readingList = LoadUtil.getFromDB("Reading", "book", temp.getId(), pm);
+		Reading[] result = new Reading[readingList.size()];
+		List<Note> noteList = new ArrayList<Note>();
+		for(int i=0;i<result.length;i++){
+			result[i] = (Reading)readingList.get(i);
+			List<?> notesOfThisReading = LoadUtil.getFromDB("Note", "reading", result[i].getId(), pm);
+			for(int j=0;j<notesOfThisReading.size();j++){
+				noteList.add((Note)notesOfThisReading.get(j));
+			}
+		}
+		Note[] ret = new Note[noteList.size()];
+		for(int i=0;i<ret.length;i++){
+			ret[i] = noteList.get(i);
+		}
+		return ret;
+		
+	}
+
+	public String getStatusByTitle(String title){
+		Book bk = getBookByTitle(title);
+		if(bk instanceof EBook){
+			return "EBook";
+		}else{
+			PaperBook pbbk = (PaperBook)bk;
+			if(pbbk.isBorrow()){
+				return "borrowed";
+			}
+			return "not borrowed";
+		}
+	}
+
+
 }

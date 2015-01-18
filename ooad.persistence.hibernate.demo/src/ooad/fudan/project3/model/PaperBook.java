@@ -8,11 +8,14 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
+import ooad.fudan.project3.database.LoadUtil;
 import edu.fudan.ss.persistence.hibernate.common.IPersistenceManager;
 
 @Entity
 @DiscriminatorValue("PAPER")
 public class PaperBook extends Book {
+	
+	public PaperBook(){}
 	
 	public static PaperBook create(Library library, String title, IPersistenceManager pm) {
 		PaperBook result = new PaperBook();
@@ -49,6 +52,11 @@ public class PaperBook extends Book {
 
 	public void setBorrow(boolean borrow) {
 		this.borrow = borrow;
+	}
+	
+	public void init(IPersistenceManager pm){
+		super.init(pm);
+		records = (Collection<BorrowRecord>) LoadUtil.getFromDB("BorrowRecord", "paperBook", this.getId(), pm);
 	}
 	
 }

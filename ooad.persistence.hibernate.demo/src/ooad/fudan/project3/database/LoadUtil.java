@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.hibernate.Query;
 
+import ooad.fudan.project3.model.Book;
+import ooad.fudan.project3.model.Friend;
 import ooad.fudan.project3.model.Library;
 import edu.fudan.ss.persistence.hibernate.common.IPersistenceManager;
 
@@ -22,11 +24,14 @@ public class LoadUtil {
 		return l;
 	}
 	
-	public static List<?> getFriendFromDB(String name,IPersistenceManager pm){
+	public static Friend getFriendByName(String name, IPersistenceManager pm){
 		String hql = "from Friend f where f.name ='" + name + "'";
 		Query q = pm.createQuery(hql);
-		List<?> l = q.list();
-		return l;
+		List<?> friendList = q.list();
+		if(friendList.size() == 0){
+			return null;
+		}
+		return (Friend)friendList.get(0);
 	}
 	
 }

@@ -17,6 +17,7 @@ import edu.fudan.ss.persistence.hibernate.common.*;
 //@ContextConfiguration(locations = { "classpath:HibernateApplicationContext-aop.xml" })
 public class MainAction implements ApplicationContextAware{
 	Library library = Library.getInstance(getPersistenceManager());
+
 	protected static ApplicationContext appContext;
 	final String EXIT = "exit";
 	final String SPLIT_REGEX = 	"_";
@@ -25,6 +26,8 @@ public class MainAction implements ApplicationContextAware{
 	final String COMMAND_LEND = "lendbook";
 	final String COMMAND_RETURN = "returnbook";
 	final String COMMAND_DELETE = "deletebook";
+	final String COMMAND_STATUS = "bookstatus";
+	final String COMMAND_HISTORY = "gethistory";
 		
 	public void doCommand(String command) throws IOException{
 								
@@ -56,6 +59,13 @@ public class MainAction implements ApplicationContextAware{
 				else if(para[0].equals(COMMAND_RETURN) && para.length == 3){
 					doReturnCommand(para);
 				}
+				
+				//command to see status: bookstatus_title
+				else if(para[0].equals(COMMAND_STATUS) && para.length == 2){
+					doStatusCommand(para);
+				}
+				
+				//command to check history: gethistory_friend
 				
 				//command to exit: exit
 				else if(para[0].equals(EXIT)){
@@ -155,8 +165,14 @@ public class MainAction implements ApplicationContextAware{
 		}
 	}
 	
+	public void doStatusCommand(String[] para){
+		String title = para[1];
+		LibraryAction la = new LibraryAction(library);
+		System.out.println(title + la.getStatusByTitle(title));
+	}
+	
 	public void process() throws IOException{
-				
+		//library.init(getPersistenceManager());		
 		while(true){
 			System.out.print("Command>");
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -172,6 +188,7 @@ public class MainAction implements ApplicationContextAware{
 	}
 	
 	public static void main(String args[]){
+		
 		appContext = new ClassPathXmlApplicationContext("HibernateApplicationContext-aop.xml");
 		MainAction ma = new MainAction();
 		try {

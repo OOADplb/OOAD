@@ -1,8 +1,10 @@
 package ooad.fudan.project3.control;
 
 import java.sql.Date;
+import java.util.List;
 
 import edu.fudan.ss.persistence.hibernate.common.IPersistenceManager;
+import ooad.fudan.project3.database.LoadUtil;
 import ooad.fudan.project3.model.*;
 
 public class Borrow_Return {
@@ -42,5 +44,22 @@ public class Borrow_Return {
 		paperbook.setBorrow(false);
 		paperbook.update(pm);
 		return record;
+	}
+
+	
+	
+	public BorrowRecord[] getHistoryByName(String name, IPersistenceManager pm){
+		Friend f = LoadUtil.getFriendByName(name, pm);
+		if(f == null){
+			return null;
+		}
+		int id = f.getId();
+		List<?> history = LoadUtil.getFromDB("BorrowRecord", "friend", id, pm);
+		BorrowRecord result[] = new BorrowRecord[history.size()];
+		
+		for(int i=0;i<result.length;i++){
+			result[i] = (BorrowRecord)history.get(i);
+		}
+		return result;
 	}
 }

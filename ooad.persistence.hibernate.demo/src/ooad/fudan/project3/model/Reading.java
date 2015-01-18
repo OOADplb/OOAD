@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import ooad.fudan.project3.database.LoadUtil;
 import edu.fudan.ss.persistence.hibernate.common.BaseModelObject;
 import edu.fudan.ss.persistence.hibernate.common.IPersistenceManager;
 
@@ -72,5 +73,7 @@ public class Reading extends BaseModelObject {
 		
 	}
 	
-	
+	public void init(IPersistenceManager pm){
+		notes = (Collection<Note>) LoadUtil.getFromDB("Note", "reading", this.getId(), pm);
+	}
 }
