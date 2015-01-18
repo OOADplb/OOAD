@@ -29,8 +29,7 @@ public class MainAction implements ApplicationContextAware{
 	final String COMMAND_RETURN = "returnbook";
 		
 	public void doCommand(String command) throws IOException{
-						
-		while(true){				
+								
 		
 			if(command != null){
 				String[] para = command.split(SPLIT_REGEX);
@@ -67,19 +66,18 @@ public class MainAction implements ApplicationContextAware{
 			}
 			System.out.println("You command has been processed!");
 		}		
-	}
 
 	public void doAddCommand(String[] para){
 		String title = para[1];
 		String type = (para[2].equals("1"))?"Paperbook":"EBook";
 		if(type.equals("Paperbook")){
-			PaperBook pb = PaperBook.create(library, title, PMHibernateImpl.getInstance());
+			PaperBook pb = PaperBook.create(library, title, getPersistenceManager());
 			LibraryAction la = new LibraryAction(library);
-			la.addBook(pb, PMHibernateImpl.getInstance());
+			la.addBook(pb, getPersistenceManager());
 		}else if(type.equals("EBook")){
-			EBook eb = EBook.create(library, title, PMHibernateImpl.getInstance());
+			EBook eb = EBook.create(library, title, getPersistenceManager());
 			LibraryAction la = new LibraryAction(library);
-			la.addBook(eb, PMHibernateImpl.getInstance());
+			la.addBook(eb, getPersistenceManager());
 		}		
 	}
 	
@@ -89,7 +87,7 @@ public class MainAction implements ApplicationContextAware{
 		Book bookGet = la.getBookByTitle(title);
 		
 		ReadBook rb = new ReadBook(bookGet);
-		Reading rd = rb.startReading(PMHibernateImpl.getInstance());
+		Reading rd = rb.startReading(getPersistenceManager());
 		
 		//Write notes
 		while(true){
@@ -99,7 +97,7 @@ public class MainAction implements ApplicationContextAware{
 			if(note.equals(EXIT)){
 				break;
 			}else{
-				rb.writeNote(PMHibernateImpl.getInstance(), rd, note);
+				rb.writeNote(getPersistenceManager(), rd, note);
 			}
 		}
 		
@@ -114,11 +112,11 @@ public class MainAction implements ApplicationContextAware{
 				System.out.print("write the uri of this comment:");
 				BufferedReader uriReader = new BufferedReader(new InputStreamReader(System.in));
 				String uri = uriReader.readLine();
-				rb.writeComment(PMHibernateImpl.getInstance(), comment, uri);
+				rb.writeComment(getPersistenceManager(), comment, uri);
 			}
 		}
 	
-		rb.endReading(PMHibernateImpl.getInstance(), rd);
+		rb.endReading(getPersistenceManager(), rd);
 	}
 	
 	public void doLendCommand(String[] para){
@@ -130,7 +128,7 @@ public class MainAction implements ApplicationContextAware{
 		if(bookGet instanceof PaperBook){
 			PaperBook pb = (PaperBook)bookGet;
 			Borrow_Return br = new Borrow_Return(pb, friend);
-			br.borrowBook(PMHibernateImpl.getInstance());
+			br.borrowBook(getPersistenceManager());
 		}else{
 			System.err.println("This is an EBook!");
 		}
@@ -145,7 +143,7 @@ public class MainAction implements ApplicationContextAware{
 		if(bookGet instanceof PaperBook){
 			PaperBook pb = (PaperBook)bookGet;
 			Borrow_Return br = new Borrow_Return(pb, friend);
-			br.returnBook(PMHibernateImpl.getInstance());
+			br.returnBook(getPersistenceManager());
 		}else{
 			System.err.println("This is an EBook!");
 		}

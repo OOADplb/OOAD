@@ -13,6 +13,12 @@ public class LibraryAction {
 	}
 	
 	public Library addBook(Book b, IPersistenceManager pm){
+		Book temp = getBookByTitle(b.getTitle());
+		if(temp != null){
+			System.err.println("The book already exists!");
+			return library;
+		}
+		
 		if(b instanceof PaperBook){
 			library.createPaperBook(b.getTitle(), pm);
 		}else if(b instanceof EBook){
