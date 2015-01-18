@@ -66,7 +66,9 @@ public class MainAction implements ApplicationContextAware{
 				}
 				
 				//command to check history: gethistory_friend
-				
+				else if(para[0].equals(COMMAND_HISTORY) && para.length == 2){
+					doHistoryCommand(para);
+				}
 				//command to exit: exit
 				else if(para[0].equals(EXIT)){
 					
@@ -168,7 +170,22 @@ public class MainAction implements ApplicationContextAware{
 	public void doStatusCommand(String[] para){
 		String title = para[1];
 		LibraryAction la = new LibraryAction(library);
-		System.out.println(title + la.getStatusByTitle(title));
+		System.out.println(title + " " + la.getStatusByTitle(title));
+	}
+	
+	public void doHistoryCommand(String[] para){
+		String name = para[1];
+		BorrowRecord[] br = Borrow_Return.getHistoryByName(name, getPersistenceManager());
+		if(br == null){
+			System.out.println("no borrow record");
+			return;
+		}
+		for(int i=0;i<br.length;i++){
+			BorrowRecord record = br[i];
+			System.out.println("start:" + record.getStart() + 
+					" end:" + record.getEnd() + " book_Title:" + 
+					record.getPaperBook().getTitle());
+		}
 	}
 	
 	public void process() throws IOException{

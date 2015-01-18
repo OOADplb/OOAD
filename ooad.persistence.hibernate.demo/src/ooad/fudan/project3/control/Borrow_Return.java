@@ -48,7 +48,7 @@ public class Borrow_Return {
 
 	
 	
-	public BorrowRecord[] getHistoryByName(String name, IPersistenceManager pm){
+	public static BorrowRecord[] getHistoryByName(String name, IPersistenceManager pm){
 		Friend f = LoadUtil.getFriendByName(name, pm);
 		if(f == null){
 			return null;
