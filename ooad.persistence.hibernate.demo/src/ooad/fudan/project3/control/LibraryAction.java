@@ -12,23 +12,35 @@ public class LibraryAction {
 		this.library = library;
 	}
 	
-	public Library addBook(Book b, IPersistenceManager pm){
-		Book temp = getBookByTitle(b.getTitle());
+	public Book addBook(String title, String type,
+			IPersistenceManager pm) {
+		Book temp = getBookByTitle(title);
 		if(temp != null){
 			System.err.println("The book already exists!");
-			return library;
+			return temp;
 		}
 		
-		if(b instanceof PaperBook){
-			library.createPaperBook(b.getTitle(), pm);
-		}else if(b instanceof EBook){
-			library.createEBook(b.getTitle(), pm);
+		if(type.equals("Paperbook")){
+			temp = library.createPaperBook(title, pm);
+		}else if(type.equals("EBook")){
+			temp = library.createEBook(title, pm);
 		}else{
 			System.err.println("Please clarify the type of the book");
-		}
-		return library;
+		}	
+
+		return temp;
+		
 	}
 
+	public void deleteBook(String title, IPersistenceManager pm){
+		Book temp = getBookByTitle(title);
+		if(temp == null){
+			System.err.println("The book does not exist!");
+		}
+		
+		library.deleteBook(temp, pm);
+	}
+	
 	public Book getBookByTitle(String title){
 		Collection<Book> books = library.getBooks();
 		Object[] bookArray = books.toArray();
@@ -43,4 +55,5 @@ public class LibraryAction {
 		System.err.println("There is no book with this title");
 		return null;
 	}
+
 }

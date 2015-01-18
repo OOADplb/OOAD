@@ -4,13 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import ooad.fudan.project3.model.*;
 import ooad.fudan.project3.control.*;
@@ -70,15 +67,8 @@ public class MainAction implements ApplicationContextAware{
 	public void doAddCommand(String[] para){
 		String title = para[1];
 		String type = (para[2].equals("1"))?"Paperbook":"EBook";
-		if(type.equals("Paperbook")){
-			PaperBook pb = PaperBook.create(library, title, getPersistenceManager());
-			LibraryAction la = new LibraryAction(library);
-			la.addBook(pb, getPersistenceManager());
-		}else if(type.equals("EBook")){
-			EBook eb = EBook.create(library, title, getPersistenceManager());
-			LibraryAction la = new LibraryAction(library);
-			la.addBook(eb, getPersistenceManager());
-		}		
+		LibraryAction la = new LibraryAction(library);
+		la.addBook(title, type, getPersistenceManager());	
 	}
 	
 	public void doReadCommand(String[] para) throws IOException{

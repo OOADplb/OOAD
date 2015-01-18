@@ -52,4 +52,9 @@ public class Library extends BaseModelObject {
 		books.add(eb);
 		return eb;
 	}
+
+	public void deleteBook(Book temp, IPersistenceManager pm) {
+		books.remove(temp);
+		pm.delete(temp);
+	}
 }
