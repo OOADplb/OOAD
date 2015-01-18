@@ -47,6 +47,9 @@
 			<list>
 				<value>edu.fudan.ss.persistence.hibernate.demo</value>
 				<value>ooad.fudan.project3.model</value>
+				<value>ooad.fudan.project3.control</value>
+				<value>ooad.fudan.project3.database</value>
+				<value>ooad.fudan.project3.runnable</value>
 			</list>
 		</property>
 	</bean>

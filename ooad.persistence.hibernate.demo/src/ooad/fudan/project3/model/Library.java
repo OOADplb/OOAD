@@ -48,7 +48,7 @@ public class Library extends BaseModelObject {
 			return create(pm);
 		}
 		return library;
-//		return create(pm);
+		//return create(pm);
 	}
 	
 	public Library init(IPersistenceManager pm){

@@ -11,12 +11,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import ooad.fudan.project3.model.*;
 import ooad.fudan.project3.control.*;
+import ooad.fudan.project3.database.LoadUtil;
 import edu.fudan.ss.persistence.hibernate.common.*;
 
 
 //@ContextConfiguration(locations = { "classpath:HibernateApplicationContext-aop.xml" })
 public class MainAction implements ApplicationContextAware{
-	Library library = Library.getInstance(getPersistenceManager());
+	private IPersistenceManager pm;
+	Library library;
 
 	protected static ApplicationContext appContext;
 	final String EXIT = "exit";
@@ -28,7 +30,18 @@ public class MainAction implements ApplicationContextAware{
 	final String COMMAND_DELETE = "deletebook";
 	final String COMMAND_STATUS = "bookstatus";
 	final String COMMAND_HISTORY = "gethistory";
-		
+	final String COMMAND_NOTE = "getnote";
+	final String COMMAND_COMMENT = "getcomment";
+	
+	public MainAction() {
+	}
+	
+	public MainAction(IPersistenceManager pm) {
+		super();
+		this.pm = pm;
+		library = Library.getInstance(pm);
+	}
+
 	public void doCommand(String command) throws IOException{
 								
 			boolean isIllegal = false;
@@ -69,6 +82,17 @@ public class MainAction implements ApplicationContextAware{
 				else if(para[0].equals(COMMAND_HISTORY) && para.length == 2){
 					doHistoryCommand(para);
 				}
+				
+				//command to get notes: getnote_title
+				else if(para[0].equals(COMMAND_NOTE) && para.length == 2){
+					doNoteCommand(para);
+				}
+				
+				//command to get comments: getcomment_title
+				else if(para[0].equals(COMMAND_COMMENT) && para.length == 2){
+					doCommentCommand(para);
+				}
+				
 				//command to exit: exit
 				else if(para[0].equals(EXIT)){
 					
@@ -81,20 +105,20 @@ public class MainAction implements ApplicationContextAware{
 				}
 			}
 			if(!isIllegal)
-				System.out.println("You command has been processed!");
+				System.out.println("Your command has been processed!");
 		}		
 
 	private void doDeleteCommand(String[] para) {
 		String title = para[1];
 		LibraryAction la = new LibraryAction(library);
-		la.deleteBook(title, getPersistenceManager());
+		la.deleteBook(title, pm);
 	}
 
 	public void doAddCommand(String[] para){
 		String title = para[1];
 		String type = (para[2].equals("1"))?"Paperbook":"EBook";
 		LibraryAction la = new LibraryAction(library);
-		la.addBook(title, type, getPersistenceManager());	
+		la.addBook(title, type, pm);	
 	}
 	
 	public void doReadCommand(String[] para) throws IOException{
@@ -102,8 +126,13 @@ public class MainAction implements ApplicationContextAware{
 		LibraryAction la = new LibraryAction(library);
 		Book bookGet = la.getBookByTitle(title);
 		
+		if(bookGet == null){
+			System.err.println("No such book!");
+			return;
+		}
+		
 		ReadBook rb = new ReadBook(bookGet);
-		Reading rd = rb.startReading(getPersistenceManager());
+		Reading rd = rb.startReading(pm);
 		
 		//Write notes
 		while(true){
@@ -113,7 +142,7 @@ public class MainAction implements ApplicationContextAware{
 			if(note.equals(EXIT)){
 				break;
 			}else{
-				rb.writeNote(getPersistenceManager(), rd, note);
+				rb.writeNote(pm, rd, note);
 			}
 		}
 		
@@ -128,24 +157,26 @@ public class MainAction implements ApplicationContextAware{
 				System.out.print("write the uri of this comment:");
 				BufferedReader uriReader = new BufferedReader(new InputStreamReader(System.in));
 				String uri = uriReader.readLine();
-				rb.writeComment(getPersistenceManager(), comment, uri);
+				rb.writeComment(pm, comment, uri);
 			}
 		}
 	
-		rb.endReading(getPersistenceManager(), rd);
+		rb.endReading(pm, rd);
 	}
 	
 	public void doLendCommand(String[] para){
 		String friendName = para[1];
 		LibraryAction la = new LibraryAction(library);
-		//Friend friend = la.getFriendByName(friendName, getPersistenceManager());
-		Friend friend = Friend.create(friendName, getPersistenceManager());
+		Friend friend = LoadUtil.getFriendByName(friendName, pm);		
+		if(friend == null){
+			friend = Friend.create(friendName, pm);
+		}
 		String title = para[2];
 		Book bookGet = la.getBookByTitle(title);
 		if(bookGet instanceof PaperBook){
 			PaperBook pb = (PaperBook)bookGet;
 			Borrow_Return br = new Borrow_Return(pb, friend);
-			br.borrowBook(getPersistenceManager());
+			br.borrowBook(pm);
 		}else{
 			System.err.println("This is an EBook!");
 		}
@@ -154,14 +185,17 @@ public class MainAction implements ApplicationContextAware{
 	public void doReturnCommand(String[] para){
 		String friendName = para[1];
 		LibraryAction la = new LibraryAction(library);
-		//Friend friend = la.getFriendByName(friendName, getPersistenceManager());
-		Friend friend = Friend.create(friendName, getPersistenceManager());
+		Friend friend = LoadUtil.getFriendByName(friendName, pm);
+		if(friend == null){
+			System.err.println("No such a friend");
+			return;
+		}
 		String title = para[2];
 		Book bookGet = la.getBookByTitle(title);
 		if(bookGet instanceof PaperBook){
 			PaperBook pb = (PaperBook)bookGet;
 			Borrow_Return br = new Borrow_Return(pb, friend);
-			br.returnBook(getPersistenceManager());
+			br.returnBook(pm);
 		}else{
 			System.err.println("This is an EBook!");
 		}
@@ -175,8 +209,8 @@ public class MainAction implements ApplicationContextAware{
 	
 	public void doHistoryCommand(String[] para){
 		String name = para[1];
-		BorrowRecord[] br = Borrow_Return.getHistoryByName(name, getPersistenceManager());
-		if(br == null){
+		BorrowRecord[] br = Borrow_Return.getHistoryByName(name, pm);
+		if(br == null || br.length == 0){
 			System.out.println("no borrow record");
 			return;
 		}
@@ -188,8 +222,39 @@ public class MainAction implements ApplicationContextAware{
 		}
 	}
 	
+	public void doNoteCommand(String[]  para){
+		String title = para[1];
+		LibraryAction la = new LibraryAction(library);
+		Note[] n = la.getNoteByBook(title, pm);
+		if(n == null || n.length == 0){
+			System.out.println("No notes");
+			return;
+		}else{
+			for(int i=0;i<n.length;i++){
+				System.out.println("Date: " + n[i].getDate() + " "
+						+ "Content:" + n[i].getContent());
+			}
+		}
+	}
+	
+	public void doCommentCommand(String[]  para){
+		String title = para[1];
+		LibraryAction la = new LibraryAction(library);
+		Comment[] c = la.getCommentByBook(title, pm);
+		if(c == null || c.length == 0){
+			System.out.println("No comments");
+			return;
+		}else{
+			for(int i=0;i<c.length;i++){
+				System.out.println("Book: " + c[i].getBook().getTitle() 
+						+ " Abstract: " + c[i].getAbstracts()
+						+ " uri: " + c[i].getURI());
+			}
+		}
+	}
+	
 	public void process() throws IOException{
-		//library.init(getPersistenceManager());		
+		//library.init(pm);		
 		while(true){
 			System.out.print("Command>");
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -220,10 +285,6 @@ public class MainAction implements ApplicationContextAware{
 			throws BeansException {
 		appContext = context;
 
-	}
-
-	public IPersistenceManager getPersistenceManager() {
-		return (IPersistenceManager) appContext.getBean("persistenceManager");
 	}
 	
 }

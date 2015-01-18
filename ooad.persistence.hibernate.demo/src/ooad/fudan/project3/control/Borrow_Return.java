@@ -23,7 +23,7 @@ public class Borrow_Return {
 			System.err.println("The book has been borrowed!");
 			return null;
 		}	
-		//增加一条借阅记录
+		//增加一条借阅记录	
 		paperbook.createRecord(friend, pm);
 		//书本设为已借阅状态
 		paperbook.setBorrow(true);
