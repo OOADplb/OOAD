@@ -24,6 +24,7 @@ public class MainAction implements ApplicationContextAware{
 	final String COMMAND_READ = "readbook";
 	final String COMMAND_LEND = "lendbook";
 	final String COMMAND_RETURN = "returnbook";
+	final String COMMAND_DELETE = "deletebook";
 		
 	public void doCommand(String command) throws IOException{
 								
@@ -35,6 +36,10 @@ public class MainAction implements ApplicationContextAware{
 				if(para[0].equals(COMMAND_ADD) && para.length == 3){
 					doAddCommand(para);		
 				}
+				
+				else if(para[0].equals(COMMAND_DELETE)){
+					doDeleteCommand(para);
+				}		
 				
 				//command to read book: readbook_title
 				else if(para[0].equals(COMMAND_READ) && para.length == 2){
@@ -54,7 +59,7 @@ public class MainAction implements ApplicationContextAware{
 				//command to exit: exit
 				else if(para[0].equals(EXIT)){
 					
-				}				
+				}	
 				
 				//Other commands are illegal
 				else{
@@ -63,6 +68,12 @@ public class MainAction implements ApplicationContextAware{
 			}
 			System.out.println("You command has been processed!");
 		}		
+
+	private void doDeleteCommand(String[] para) {
+		String title = para[1];
+		LibraryAction la = new LibraryAction(library);
+		la.deleteBook(title, getPersistenceManager());
+	}
 
 	public void doAddCommand(String[] para){
 		String title = para[1];
