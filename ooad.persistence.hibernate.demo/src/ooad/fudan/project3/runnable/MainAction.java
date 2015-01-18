@@ -28,7 +28,7 @@ public class MainAction implements ApplicationContextAware{
 		
 	public void doCommand(String command) throws IOException{
 								
-		
+			boolean isIllegal = false;
 			if(command != null){
 				String[] para = command.split(SPLIT_REGEX);
 				
@@ -37,6 +37,7 @@ public class MainAction implements ApplicationContextAware{
 					doAddCommand(para);		
 				}
 				
+				//Command to delete book: deletebook_title
 				else if(para[0].equals(COMMAND_DELETE)){
 					doDeleteCommand(para);
 				}		
@@ -63,10 +64,12 @@ public class MainAction implements ApplicationContextAware{
 				
 				//Other commands are illegal
 				else{
+					isIllegal = true;
 					System.err.println("Illegal command!");
 				}
 			}
-			System.out.println("You command has been processed!");
+			if(!isIllegal)
+				System.out.println("You command has been processed!");
 		}		
 
 	private void doDeleteCommand(String[] para) {
@@ -122,9 +125,10 @@ public class MainAction implements ApplicationContextAware{
 	
 	public void doLendCommand(String[] para){
 		String friendName = para[1];
-		Friend friend = FriendAction.getFriendByName(friendName);
-		String title = para[2];
 		LibraryAction la = new LibraryAction(library);
+		//Friend friend = la.getFriendByName(friendName, getPersistenceManager());
+		Friend friend = Friend.create(friendName, getPersistenceManager());
+		String title = para[2];
 		Book bookGet = la.getBookByTitle(title);
 		if(bookGet instanceof PaperBook){
 			PaperBook pb = (PaperBook)bookGet;
@@ -137,9 +141,10 @@ public class MainAction implements ApplicationContextAware{
 	
 	public void doReturnCommand(String[] para){
 		String friendName = para[1];
-		Friend friend = FriendAction.getFriendByName(friendName);
-		String title = para[2];
 		LibraryAction la = new LibraryAction(library);
+		//Friend friend = la.getFriendByName(friendName, getPersistenceManager());
+		Friend friend = Friend.create(friendName, getPersistenceManager());
+		String title = para[2];
 		Book bookGet = la.getBookByTitle(title);
 		if(bookGet instanceof PaperBook){
 			PaperBook pb = (PaperBook)bookGet;

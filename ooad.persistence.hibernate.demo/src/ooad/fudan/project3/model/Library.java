@@ -2,13 +2,13 @@ package ooad.fudan.project3.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+//import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
-import ooad.fudan.project3.database.LoadUtil;
+//import ooad.fudan.project3.database.LoadUtil;
 import edu.fudan.ss.persistence.hibernate.common.BaseModelObject;
 import edu.fudan.ss.persistence.hibernate.common.IPersistenceManager;
 

@@ -1,9 +1,11 @@
 package ooad.fudan.project3.control;
 
 import java.util.Collection;
+import java.util.List;
 
 import edu.fudan.ss.persistence.hibernate.common.IPersistenceManager;
 import ooad.fudan.project3.model.*;
+import ooad.fudan.project3.database.*;
 
 public class LibraryAction {
 	Library library;
@@ -36,6 +38,7 @@ public class LibraryAction {
 		Book temp = getBookByTitle(title);
 		if(temp == null){
 			System.err.println("The book does not exist!");
+			return;
 		}
 		
 		library.deleteBook(temp, pm);
@@ -56,4 +59,21 @@ public class LibraryAction {
 		return null;
 	}
 
+	public Friend getFriendByName(String name, IPersistenceManager pm){
+		List<?> friendList = LoadUtil.getFriendFromDB(name, pm);
+		if(friendList.size() == 0){
+			return null;
+		}
+		return (Friend)friendList.get(0);
+	}
+	
+	public Friend addFriend(String name, IPersistenceManager pm){
+		Friend temp = getFriendByName(name, pm);
+		if(temp != null){
+			System.err.println("The book already exists!");
+			return temp;
+		}
+		Friend f = Friend.create(name, pm);
+		return f;
+	}
 }

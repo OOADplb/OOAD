@@ -21,4 +21,12 @@ public class LoadUtil {
 		List<?> l = q.list();
 		return l;
 	}
+	
+	public static List<?> getFriendFromDB(String name,IPersistenceManager pm){
+		String hql = "from Friend f where f.name ='" + name + "'";
+		Query q = pm.createQuery(hql);
+		List<?> l = q.list();
+		return l;
+	}
+	
 }
